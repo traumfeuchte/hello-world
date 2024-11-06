@@ -1,0 +1,4684 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Quentn official API",
+    "description": "Quentn.com official API ",
+    "termsOfService": "https://quentn.com/en/terms-and-conditions",
+    "contact": {
+      "name": "API Support",
+      "url": "https://quentn.com/contact",
+      "email": "support@quentn.com"
+    },
+    "version": "1.0.0"
+  },
+  "externalDocs": {
+    "description": "Find out more about Quentn.com",
+    "url": "https://quentn.com"
+  },
+  "servers": [
+    {
+      "url": "{api_base_url}",
+      "variables": {
+        "api_base_url": {
+          "description": "Api base url",
+          "default": ""
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    },
+    {
+      "qntn_oauth": [
+        "all"
+      ]
+    }
+  ],
+  "tags": [
+    {
+      "name": "contact",
+      "description": "Manage your contacts",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://help.quentn.com/hc/en-150/articles/4517835330961-Contact-API"
+      }
+    },
+    {
+      "name": "terms",
+      "description": "Manage your terms",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://help.quentn.com/hc/en-150/articles/4518012188945-Terms-API"
+      }
+    },
+    {
+      "name": "user",
+      "description": "Get user detail",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://help.quentn.com/hc/en-150/articles/19990855749265-User-API"
+      }
+    },
+    {
+      "name": "campaign",
+      "description": "Manage your campaigns",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://help.quentn.com/hc/en-150/articles/4518054010129-Campaign-API"
+      }
+    },
+    {
+      "name": "custom fields",
+      "description": "Manage your Custom fields",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "https://help.quentn.com/hc/en-150/articles/4518070370577-Custom-fields-API"
+      }
+    }
+  ],
+  "paths": {
+    "/contact/{contactId}": {
+      "get": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Get contact by Id",
+        "description": "This is used to get contact by Id.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "List of contact fields to return",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact Data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                },
+                "examples": {
+                  "default": {
+                    "$ref": "#/components/examples/contactDefaultExample"
+                  },
+                  "withFields": {
+                    "$ref": "#/components/examples/contactWithFieldsExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Update contact",
+        "description": "This is used to update contact.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update contact in Quentn",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "default": {
+                  "first_name": "John",
+                  "family_name": "Doe",
+                  "return_fields": [
+                    "mail_status",
+                    "mail",
+                    "first_name",
+                    "family_name"
+                  ]
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact updated successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Delete a contact",
+        "description": "This is used to delete a contact",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact deleted successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact/{contactEmail}": {
+      "get": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Get contact by email",
+        "description": "This is used to get list of all contacts.",
+        "parameters": [
+          {
+            "name": "contactEmail",
+            "in": "path",
+            "description": "Contact id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "fields",
+            "in": "query",
+            "description": "List of contact fields to return",
+            "required": false,
+            "style": "form",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "default": ""
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact Data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactResponse"
+                },
+                "examples": {
+                  "default": {
+                    "$ref": "#/components/examples/contactDefaultExample"
+                  },
+                  "withFields": {
+                    "$ref": "#/components/examples/contactWithFieldsExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact": {
+      "post": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Create contact",
+        "description": "This is used to create a single contact.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ContactBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Contact created successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                },
+                "examples": {
+                  "default": {
+                    "value": {
+                      "id": 123
+                    }
+                  },
+                  "withFields": {
+                    "$ref": "#/components/examples/contactWithFieldsExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contacts": {
+      "post": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Create multiple contacts",
+        "description": "This is used to create multiple contacts.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ContactsBody"
+        },
+        "responses": {
+          "200": {
+            "description": "Contact created successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MultiContactResponse"
+                },
+                "examples": {
+                  "Success": {
+                    "value": [
+                      {
+                        "id": 123,
+                        "mail": "johndoe@example.com"
+                      },
+                      {
+                        "id": 124,
+                        "mail": "jamesdoe@example.com"
+                      }
+                    ]
+                  },
+                  "SingleContactFailure": {
+                    "value": [
+                      {
+                        "id": 123,
+                        "mail": "johndoe@example.com"
+                      },
+                      {
+                        "mail": "jamesdoe@example.com",
+                        "error": true,
+                        "message": "The error message"
+                      }
+                    ]
+                  },
+                  "Failure": {
+                    "value": {
+                      "error": true,
+                      "message": "The error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact/{contactId}/terms": {
+      "get": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Get contact terms",
+        "description": "This is used to get all terms of a contact.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of contact terms",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContactTermResponse"
+                },
+                "examples": {
+                  "Success": {
+                    "value": [
+                      {
+                        "id": 123,
+                        "name": "tag_name",
+                        "description": "tag description"
+                      },
+                      {
+                        "id": 456,
+                        "name": "tag_name",
+                        "description": "tag description"
+                      }
+                    ]
+                  },
+                  "Failure": {
+                    "value": {
+                      "error": true,
+                      "message": "The error message"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Update a contact term",
+        "description": "This is used to update a contact term.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "example": 1
+                },
+                "default": [
+                  123,
+                  555
+                ]
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact terms set successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Delete contact terms",
+        "description": "This is used to delete contact terms.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Term Ids",
+            "required": true,
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact terms deleted successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/contact/{contactId}/comments": {
+      "get": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Get contact comments",
+        "description": "This is used to get all comments of a contact.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "range",
+            "in": "query",
+            "description": "Defines the range which should be returned. Starts from 0.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of items to return.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 50,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Defines the order of the results.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "asc",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A list of contact comments",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_2"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Update contact comment",
+        "description": "This is used to update a contact comment.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/contactId_comments_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact terms set successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Add contact comment",
+        "description": "This is used to add comment to a contact.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/contactId_comments_body_1"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact comment added successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_3"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "contact"
+        ],
+        "summary": "Delete contact comments",
+        "description": "This is used to delete contact comments.",
+        "parameters": [
+          {
+            "name": "contactId",
+            "in": "path",
+            "description": "Contact ID",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "ids",
+            "in": "query",
+            "description": "Comment Ids",
+            "required": true,
+            "style": "pipeDelimited",
+            "explode": false,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact comments deleted successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terms": {
+      "get": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Get all terms",
+        "description": "This is used to get all terms.",
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "The number of records to skip",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of records to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 500
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of all terms",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/inline_response_200_4"
+                  },
+                  "default": [
+                    {
+                      "id": 123,
+                      "name": "Tag 1",
+                      "description": "Example description",
+                      "deletion_blocked": false
+                    },
+                    {
+                      "id": 124,
+                      "name": "Tag 2",
+                      "description": "Example description",
+                      "deletion_blocked": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Add a term",
+        "description": "This is used to add a term.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/terms_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Term added successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_5"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terms/{termId}": {
+      "get": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Get term by Id",
+        "description": "This is used to get term by Id.",
+        "parameters": [
+          {
+            "name": "termId",
+            "in": "path",
+            "description": "Term id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Term data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Update a term",
+        "description": "This is used to update a term.",
+        "parameters": [
+          {
+            "name": "termId",
+            "in": "path",
+            "description": "Term id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/terms_termId_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Term updated successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Delete a term",
+        "description": "This is used to delete term.",
+        "parameters": [
+          {
+            "name": "termId",
+            "in": "path",
+            "description": "Term id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Term deleted successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/terms/{termName}": {
+      "get": {
+        "tags": [
+          "terms"
+        ],
+        "summary": "Get term by name",
+        "description": "This is used to get term by name.",
+        "parameters": [
+          {
+            "name": "termName",
+            "in": "path",
+            "description": "Term name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Term data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_6"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get users",
+        "description": "This is used to get all users.",
+        "parameters": [
+          {
+            "name": "range",
+            "in": "query",
+            "description": "Defines the range which should be returned. Starts from 0.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "The number of records to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 20,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32",
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Defines the order of the results.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "asc",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of users",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_7"
+                },
+                "example": {
+                  "number_users": 12,
+                  "range": 1,
+                  "limit": 10,
+                  "sort": "desc",
+                  "number_ranges": 2,
+                  "users": [
+                    {
+                      "uid": 2,
+                      "mail": "user@example.com",
+                      "first_name": "John",
+                      "last_name": "Doe",
+                      "timezone": "Europe/Berlin",
+                      "language": "de",
+                      "created": 1627980505,
+                      "changed": 1627980505,
+                      "roles": [
+                        {
+                          "rid": 2,
+                          "name": "Editor"
+                        },
+                        {
+                          "rid": 4,
+                          "name": "Writer"
+                        }
+                      ]
+                    },
+                    {
+                      "uid": 5,
+                      "mail": "jon-doe@example.com",
+                      "first_name": "Jane",
+                      "last_name": "Doe",
+                      "timezone": "Europe/London",
+                      "language": "en",
+                      "created": 1627980505,
+                      "changed": 1627980505,
+                      "roles": [
+                        {
+                          "rid": 2,
+                          "name": "Editor"
+                        },
+                        {
+                          "rid": 3,
+                          "name": "Staff Member"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by Id",
+        "description": "This is used to get user by id.",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "description": "User id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "userExample": {
+                    "$ref": "#/components/examples/userExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{userEmail}": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user by email",
+        "description": "This is used to get user by id.",
+        "parameters": [
+          {
+            "name": "userEmail",
+            "in": "path",
+            "description": "User email",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "userExample": {
+                    "$ref": "#/components/examples/userExample"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cb/{campaignId}": {
+      "post": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Trigger Element",
+        "description": "Contact object must contain either a valid mail field or a full address including the following fields: *first_name*, *family_name*, *ba_street*, *ba_city*, *ba_postal_code*. You can also push an existing contact by providing only the contact ID.\n",
+        "parameters": [
+          {
+            "name": "campaignId",
+            "in": "path",
+            "description": "Campaign id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/cb_campaignId_body"
+              },
+              "examples": {
+                "byMail": {
+                  "summary": "Request body Example 1",
+                  "value": {
+                    "mail": "johndoe@example.com",
+                    "first_name": "John",
+                    "family_name": "Doe"
+                  }
+                },
+                "byId": {
+                  "summary": "Request body Example 2",
+                  "value": {
+                    "id": 123
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Contact successfully added to campaign",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_8"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-fields": {
+      "get": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Get all custom fields",
+        "description": "This is used to get all custom fields.",
+        "responses": {
+          "200": {
+            "description": "List of all custom fields",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CustomFieldResponse"
+                  },
+                  "default": [
+                    {
+                      "field_id": 123,
+                      "field_name": "field_customer_id",
+                      "label": "Customer ID",
+                      "description": "Example description",
+                      "type": "text_textfield",
+                      "field_type": "text",
+                      "required": false
+                    },
+                    {
+                      "field_id": 156,
+                      "field_name": "field_confirmation",
+                      "label": "Cookie confirmation",
+                      "description": "Example description",
+                      "type": "checkbox_confirmation",
+                      "field_type": "checkbox_confirmation",
+                      "required": true
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Create custom field",
+        "description": "This is used to create custom field.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/customfields_body"
+              },
+              "examples": {
+                "Text": {
+                  "$ref": "#/components/examples/textFieldExample"
+                },
+                "MultiSelection": {
+                  "$ref": "#/components/examples/multiSelectionFieldExample"
+                },
+                "SingleSelection": {
+                  "$ref": "#/components/examples/singleSelectionFieldExample"
+                },
+                "Date": {
+                  "$ref": "#/components/examples/dateFieldExample"
+                },
+                "Integer": {
+                  "$ref": "#/components/examples/integerFieldExample"
+                },
+                "Float": {
+                  "$ref": "#/components/examples/floatFieldExample"
+                },
+                "CheckboxConfirmation": {
+                  "$ref": "#/components/examples/checkboxConfirmationFieldExample"
+                },
+                "URL": {
+                  "$ref": "#/components/examples/urlFieldExample"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Custum field added successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_9"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-fields/{fieldId}": {
+      "get": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Get custom fields by Id",
+        "description": "This is used to get custom field by Id.",
+        "parameters": [
+          {
+            "name": "fieldId",
+            "in": "path",
+            "description": "Field id",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Term data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFieldResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/custom-fields/{fieldName}": {
+      "get": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Get custom fields by field name",
+        "description": "This is used to get custom field by name.",
+        "parameters": [
+          {
+            "name": "fieldName",
+            "in": "path",
+            "description": "Field name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Custom field data",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomFieldResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Update a custome field",
+        "description": "This is used to update a custom field.",
+        "parameters": [
+          {
+            "name": "fieldName",
+            "in": "path",
+            "description": "Field name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/customfields_fieldName_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Custum field updated successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_9"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "custom fields"
+        ],
+        "summary": "Delete custom field",
+        "description": "This is used to delete custom field.",
+        "parameters": [
+          {
+            "name": "fieldName",
+            "in": "path",
+            "description": "Field name",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contact comments deleted successfully",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "$ref": "#/components/headers/XRateLimitLimit"
+              },
+              "X-Rate-Limit-Remaining": {
+                "$ref": "#/components/headers/XRateLimitRemaining"
+              },
+              "X-Rate-Limit-Reset": {
+                "$ref": "#/components/headers/XRateLimitReset"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_10"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Operation unsuccessful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Contact": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "family_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "mail": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "request_ip": {
+            "type": "string",
+            "example": "123.123.123.123"
+          }
+        },
+        "description": "Contact object must contain either a valid mail field or a full address including the following fields: *first_name*, *family_name*, *ba_street*, *ba_city*, *ba_postal_code*.\n"
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "uid": {
+            "type": "integer"
+          },
+          "mail": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          },
+          "created": {
+            "type": "integer"
+          },
+          "changed": {
+            "type": "integer"
+          },
+          "roles": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User_roles"
+            }
+          }
+        }
+      },
+      "Comment": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Comment_inner"
+        }
+      },
+      "DuplicateCheckMethod": {
+        "type": "string",
+        "description": "Defines the method that will be used to check for duplicate contacts to merge with. Possible values are:\nauto : A probability algorithm will be used to search for duplicates (Default)\nemail : Primary email address will be used to search for duplicates\nnone : No duplicate check will be performed (not recommended)\n",
+        "default": "auto",
+        "enum": [
+          "auto",
+          "email",
+          "none"
+        ]
+      },
+      "DuplicateMergeMethod": {
+        "type": "string",
+        "description": "Defines the method that will be used to merge the conact if a duplicate was found. Possible values are:\n\nupdate_add: missing fields will be added, existing fields will be overwritten (Default)\nupdate : Given fields overwrite existing fields (with value), missing fields (no value) won't be added\nadd : only missing fields will be added\n",
+        "default": "update_add",
+        "enum": [
+          "update_add",
+          "update",
+          "add"
+        ]
+      },
+      "ReturnFields": {
+        "type": "array",
+        "description": "Defines additional contact fields, which should be returned in case of success. This makes sense for example, when you have duplicates.\n",
+        "items": {
+          "type": "string"
+        },
+        "default": []
+      },
+      "RequestIp": {
+        "type": "string",
+        "description": "The IPv4 address which belongs to the contact, for example from the request which submitted a form. This field needs to be present when using \"flood_limit\" or \"spam_protection\".\n  This parameter has to be part of the contact object.\n"
+      },
+      "FloodLimit": {
+        "type": "integer",
+        "description": "The maximum number of contacts which can be created from the same \"request_ip\" within an hour. (0 = disabled).\n",
+        "default": 5
+      },
+      "SpamProtection": {
+        "type": "boolean",
+        "description": "When this is set, the \"request_ip\" will be checked against a spammer database. \n",
+        "default": true
+      },
+      "CommonCustomFieldOptions": {
+        "required": [
+          "field_type",
+          "label"
+        ],
+        "type": "object",
+        "properties": {
+          "field_type": {
+            "type": "string",
+            "description": "Type of the custom field. Possible types are: \"text\", \"selection\", \"date\", \"integer\", \"float\", \"checkbox_confirmation\", \"url\".",
+            "default": "text",
+            "enum": [
+              "text",
+              "selection",
+              "date",
+              "integer",
+              "float",
+              "checkbox_confirmation",
+              "url"
+            ]
+          },
+          "label": {
+            "maxLength": 32,
+            "type": "string",
+            "description": "Visible label of the field."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the field."
+          },
+          "field_name": {
+            "maxLength": 32,
+            "type": "string",
+            "description": "This name will be used as unique identifier of the field. It can contain letters, numbers and underscores. It will automatically prefixed with \"field_\". If omitted, it will be generated automatically from the label.\n"
+          }
+        }
+      },
+      "CommonCustomFieldOptionsUpdate": {
+        "type": "object",
+        "properties": {
+          "label": {
+            "maxLength": 32,
+            "type": "string",
+            "description": "Visible label of the field."
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the field."
+          }
+        }
+      },
+      "CustomFieldText": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "size": {
+                "maximum": 60,
+                "minimum": 2,
+                "type": "integer",
+                "description": "The size of the text field, displayed in the contact form in the admin area. Default: 30.\n",
+                "default": 30
+              },
+              "max_length": {
+                "maximum": 255,
+                "type": "integer",
+                "default": 255,
+                "enum": [
+                  8,
+                  16,
+                  32,
+                  64,
+                  128,
+                  255
+                ]
+              }
+            },
+            "description": "A simple text field with up to 255 characters."
+          }
+        ]
+      },
+      "CustomFieldTextUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "size": {
+                "maximum": 60,
+                "minimum": 2,
+                "type": "integer",
+                "description": "The size of the text field, displayed in the contact form in the admin area. Default: 30.\n",
+                "default": 30
+              }
+            },
+            "description": "A simple text field with up to 255 characters."
+          }
+        ]
+      },
+      "CustomFieldSelection": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "required": [
+              "field_type_option",
+              "options"
+            ],
+            "type": "object",
+            "properties": {
+              "field_type_option": {
+                "type": "string",
+                "description": "Type of the selection. Possible values are: \"select\", \"radios\", \"checkboxes\". When this option is set to \"checkboxes\", the user can select multiple options. Otherwise only one option can be selected.\n",
+                "enum": [
+                  "select",
+                  "radios",
+                  "checkboxes"
+                ]
+              },
+              "options": {
+                "type": "array",
+                "description": "Key value pairs with available options. Maximum length is 255 characters per key or value. A key can contain small letters, numbers and underscores. \"select\" and \"radios\" can have up to 100 options, while \"checkboxes\" can only have 50 options.\n",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                }
+              },
+              "default_value": {
+                "description": "Defines the default value, selected in the list. This must be the key of an option. In case of \"checkboxes\", the key(s) must be in an array. For \"selection\" and \"radios\" it must be string.\n",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "A selection of predefined values. This field type can be displayed as drop down selection, radio buttons or checkboxes.\n"
+          }
+        ]
+      },
+      "CustomFieldSelectionUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "field_type_option": {
+                "type": "string",
+                "description": "Type of the selection. Possible values are: \"select\", \"radios\", \"checkboxes\". It is only possible to switch between \"select\" and \"radios\" (single selection), while \"checkboxes\" (multiple selection) cannot be changed.\n",
+                "enum": [
+                  "select",
+                  "radios",
+                  "checkboxes"
+                ]
+              },
+              "options": {
+                "type": "array",
+                "description": "Key value pairs with available options. Maximum length is 255 characters per key or value. A key can contain small letters, numbers and underscores. \"select\" and \"radios\" can have up to 100 options, while \"checkboxes\" can only have 50 options.\n",
+                "items": {
+                  "maxLength": 255,
+                  "type": "string"
+                }
+              },
+              "default_value": {
+                "description": "Defines the default value, selected in the list. This must be the key of an option. In case of \"checkboxes\", the key(s) must be in an array. For \"selection\" and \"radios\" it must be string.\n",
+                "oneOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                ]
+              }
+            },
+            "description": "A selection of predefined values. This field type can be displayed as drop down selection, radio buttons or checkboxes.\n"
+          }
+        ]
+      },
+      "CustomFieldDate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "required": [
+              "field_type",
+              "granularity",
+              "label"
+            ],
+            "type": "object",
+            "properties": {
+              "granularity": {
+                "type": "string",
+                "description": "Defines if the field stores a date with or without time. Possible values are: \"date_time\" and \"date_only\".\n",
+                "enum": [
+                  "date_time",
+                  "date_only"
+                ]
+              }
+            },
+            "description": "Field for storing dates, with or without time."
+          }
+        ]
+      },
+      "CustomFieldDateUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "description": "Field for storing dates, with or without time."
+          }
+        ]
+      },
+      "CustomFieldInteger": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "min": {
+                "$ref": "#/components/schemas/MinimumValue"
+              },
+              "max": {
+                "$ref": "#/components/schemas/MaximumValue"
+              }
+            },
+            "description": "Field for storing integer numbers."
+          }
+        ]
+      },
+      "CustomFieldIntegerUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "min": {
+                "$ref": "#/components/schemas/MinimumValue"
+              },
+              "max": {
+                "$ref": "#/components/schemas/MaximumValue"
+              }
+            },
+            "description": "Field for storing integer numbers."
+          }
+        ]
+      },
+      "CustomFieldFloat": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "required": [
+              "decimal_marker",
+              "field_type",
+              "label"
+            ],
+            "type": "object",
+            "properties": {
+              "decimal_marker": {
+                "type": "string",
+                "description": "The character used to separate the integer range from the decimal range. Possible values are \".\" and \",\".\n",
+                "enum": [
+                  ".",
+                  ","
+                ]
+              },
+              "min": {
+                "$ref": "#/components/schemas/MinimumValue"
+              },
+              "max": {
+                "$ref": "#/components/schemas/MaximumValue"
+              }
+            },
+            "description": "Field for storing float numbers."
+          }
+        ]
+      },
+      "CustomFieldFloatUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "decimal_marker": {
+                "type": "string",
+                "description": "The character used to separate the integer range from the decimal range. Possible values are \".\" and \",\".\n",
+                "enum": [
+                  ".",
+                  ","
+                ]
+              },
+              "min": {
+                "$ref": "#/components/schemas/MinimumValue"
+              },
+              "max": {
+                "$ref": "#/components/schemas/MaximumValue"
+              }
+            },
+            "description": "Field for storing float numbers."
+          }
+        ]
+      },
+      "CustomFieldCheckboxConfirmation": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "required": [
+              "confirmation_text"
+            ],
+            "type": "object",
+            "properties": {
+              "confirmation_text": {
+                "type": "string",
+                "description": "This text will be shown next to the checkbox.You can use \"[link]\" as placeholder in the text. This placeholder will be replaced by a link, which will be built from the request parameters \"link_text\" and \"link_url\".\n"
+              },
+              "link_text": {
+                "type": "string",
+                "description": "If present, this will be used for the visible part of the link whick replaces the placeholder \"[link]\" in the confirmation text."
+              },
+              "link_url": {
+                "type": "string",
+                "description": "If present, this will be used as target URL of the link which replaces the placeholder \"[link]\" in the confirmation text."
+              }
+            },
+            "description": "Provides a checkbox for saving a contact’s confirmation. It will also display a description text with an optional link to a website with further information."
+          }
+        ]
+      },
+      "CustomFieldCheckboxConfirmationUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "confirmation_text": {
+                "type": "string",
+                "description": "This text will be shown next to the checkbox.You can use \"[link]\" as placeholder in the text. This placeholder will be replaced by a link, which will be built from the request parameters \"link_text\" and \"link_url\".\n"
+              },
+              "link_text": {
+                "type": "string",
+                "description": "If present, this will be used for the visible part of the link whick replaces the placeholder \"[link]\" in the confirmation text."
+              },
+              "link_url": {
+                "type": "string",
+                "description": "If present, this will be used as target URL of the link which replaces the placeholder \"[link]\" in the confirmation text."
+              }
+            },
+            "description": "Provides a checkbox for saving a contact’s confirmation. It will also display a description text with an optional link to a website with further information."
+          }
+        ]
+      },
+      "CustomFieldURL": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptions"
+          },
+          {
+            "type": "object",
+            "description": "A simple text field meant to store URLs."
+          }
+        ]
+      },
+      "CustomFieldURLUpdate": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/CommonCustomFieldOptionsUpdate"
+          },
+          {
+            "type": "object",
+            "description": "A simple text field meant to store URLs."
+          }
+        ]
+      },
+      "MinimumValue": {
+        "type": "integer",
+        "description": "Minimum value of a number which should be stored in that field."
+      },
+      "MaximumValue": {
+        "minimum": 1,
+        "type": "integer",
+        "description": "Maximum value of a number which should be stored in that field. Must be greater than 0."
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      },
+      "ContactResponse": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 278
+          },
+          "first_name": {
+            "type": "string",
+            "example": "John"
+          },
+          "family_name": {
+            "type": "string",
+            "example": "Doe"
+          },
+          "mail": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "mail_status": {
+            "type": "integer",
+            "example": 3
+          }
+        },
+        "additionalProperties": true
+      },
+      "MultiContactSuccessResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/MultiContactSuccessResponse_inner"
+        }
+      },
+      "SingleContactCreationErrorResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/SingleContactCreationErrorResponse_inner"
+        }
+      },
+      "MultiContactResponse": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/MultiContactSuccessResponse"
+          },
+          {
+            "$ref": "#/components/schemas/SingleContactCreationErrorResponse"
+          },
+          {
+            "$ref": "#/components/schemas/Error"
+          }
+        ]
+      },
+      "ContactTermResponse": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/ContactTermResponse_inner"
+        }
+      },
+      "CustomFieldResponse": {
+        "type": "object",
+        "properties": {
+          "field_id": {
+            "type": "integer"
+          },
+          "field_name": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "field_type": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          }
+        }
+      },
+      "inline_response_200": {
+        "anyOf": [
+          {
+            "$ref": "#/components/schemas/SuccessResponse"
+          },
+          {
+            "$ref": "#/components/schemas/ContactResponse"
+          }
+        ]
+      },
+      "inline_response_200_1": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The contact id"
+          }
+        }
+      },
+      "inline_response_200_2": {
+        "type": "object",
+        "properties": {
+          "range": {
+            "type": "integer",
+            "format": "int32",
+            "example": 1
+          },
+          "limit": {
+            "type": "integer",
+            "example": 10
+          },
+          "sort": {
+            "type": "string",
+            "example": "desc"
+          },
+          "number_comments": {
+            "type": "integer",
+            "example": 12
+          },
+          "number_ranges": {
+            "type": "integer",
+            "example": 2
+          },
+          "comments": {
+            "$ref": "#/components/schemas/Comment"
+          }
+        }
+      },
+      "contactId_comments_body": {
+        "required": [
+          "comment",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 5
+          },
+          "comment": {
+            "type": "string",
+            "example": "this is an updated comment"
+          }
+        }
+      },
+      "contactId_comments_body_1": {
+        "type": "object",
+        "properties": {
+          "comment": {
+            "type": "string",
+            "example": "this is a comment"
+          }
+        }
+      },
+      "inline_response_200_3": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "comment_id": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "inline_response_200_4": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 123
+          },
+          "name": {
+            "type": "string",
+            "example": "Tag 1"
+          },
+          "description": {
+            "type": "string",
+            "example": "Example description"
+          },
+          "deletion_blocked": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "terms_body": {
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tag A"
+          },
+          "description": {
+            "type": "string",
+            "example": "Sample description"
+          }
+        }
+      },
+      "inline_response_200_5": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 123
+          }
+        }
+      },
+      "inline_response_200_6": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 123
+          },
+          "name": {
+            "type": "string",
+            "example": "Tag 1"
+          },
+          "description": {
+            "type": "string",
+            "example": "Example description"
+          },
+          "deletion_blocked": {
+            "type": "boolean",
+            "example": false
+          }
+        }
+      },
+      "terms_termId_body": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Tag A"
+          },
+          "description": {
+            "type": "string",
+            "example": "Sample description"
+          }
+        }
+      },
+      "inline_response_200_7": {
+        "type": "object",
+        "properties": {
+          "number_users": {
+            "type": "integer"
+          },
+          "range": {
+            "type": "integer"
+          },
+          "limit": {
+            "type": "integer"
+          },
+          "sort": {
+            "type": "string"
+          },
+          "number_ranges": {
+            "type": "integer"
+          },
+          "users": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/User"
+            }
+          }
+        }
+      },
+      "cb_campaignId_body": {
+        "type": "object",
+        "properties": {
+          "mail": {
+            "type": "string"
+          },
+          "first_name": {
+            "type": "string"
+          },
+          "family_name": {
+            "type": "string"
+          }
+        }
+      },
+      "inline_response_200_8": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "id": {
+            "type": "integer",
+            "example": 123
+          }
+        }
+      },
+      "customfields_body": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CustomFieldText"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldSelection"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldDate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldInteger"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldFloat"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldCheckboxConfirmation"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldURL"
+          }
+        ]
+      },
+      "inline_response_200_9": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "field_name": {
+            "type": "string",
+            "example": "field_my_new_textfield"
+          },
+          "field_id": {
+            "type": "integer",
+            "example": 278
+          }
+        }
+      },
+      "customfields_fieldName_body": {
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/CustomFieldTextUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldSelectionUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldDateUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldIntegerUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldFloatUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldCheckboxConfirmationUpdate"
+          },
+          {
+            "$ref": "#/components/schemas/CustomFieldURLUpdate"
+          }
+        ]
+      },
+      "inline_response_200_10": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "example": true
+          },
+          "field_name": {
+            "type": "string",
+            "example": "field_my_textfield"
+          }
+        }
+      },
+      "User_roles": {
+        "type": "object",
+        "properties": {
+          "rid": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Comment_inner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 8
+          },
+          "contact_id": {
+            "type": "integer",
+            "example": 88
+          },
+          "uid": {
+            "type": "integer",
+            "example": 2
+          },
+          "created": {
+            "type": "integer",
+            "example": 1627980505
+          },
+          "changed": {
+            "type": "integer",
+            "example": 1627980505
+          },
+          "comment": {
+            "type": "string",
+            "example": "this is a comment"
+          }
+        }
+      },
+      "MultiContactSuccessResponse_inner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "mail": {
+            "type": "string"
+          }
+        }
+      },
+      "SingleContactCreationErrorResponse_inner": {
+        "type": "object",
+        "properties": {
+          "mail": {
+            "type": "string"
+          },
+          "error": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ContactTermResponse_inner": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Not Found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "Too Many Requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "InternalServerError": {
+        "description": "Internal server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "Error": {
+        "description": "Operation unsuccessful",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      }
+    },
+    "parameters": {
+      "contactIdParam": {
+        "name": "contactId",
+        "in": "path",
+        "description": "Contact ID",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "contactFieldsParam": {
+        "name": "fields",
+        "in": "query",
+        "description": "List of contact fields to return",
+        "required": false,
+        "style": "form",
+        "explode": false,
+        "schema": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "default": ""
+          }
+        }
+      },
+      "termIdParam": {
+        "name": "termId",
+        "in": "path",
+        "description": "Term id",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "customFieldParam": {
+        "name": "fieldName",
+        "in": "path",
+        "description": "Field name",
+        "required": true,
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "string"
+        }
+      },
+      "rangeParam": {
+        "name": "range",
+        "in": "query",
+        "description": "Defines the range which should be returned. Starts from 0.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "minimum": 0,
+          "type": "integer",
+          "format": "int32",
+          "default": 0
+        }
+      },
+      "limitParam": {
+        "name": "limit",
+        "in": "query",
+        "description": "Maximum number of items to return.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "maximum": 50,
+          "minimum": 1,
+          "type": "integer",
+          "format": "int32",
+          "default": 50
+        }
+      },
+      "sortParam": {
+        "name": "sort",
+        "in": "query",
+        "description": "Defines the order of the results.",
+        "required": false,
+        "style": "form",
+        "explode": true,
+        "schema": {
+          "type": "string",
+          "default": "asc",
+          "enum": [
+            "asc",
+            "desc"
+          ]
+        }
+      }
+    },
+    "examples": {
+      "contactDefaultExample": {
+        "summary": "Default",
+        "value": {
+          "id": 123,
+          "first_name": "John",
+          "family_name": "Doe",
+          "mail": "johndoe@example.com",
+          "mail_status": 3
+        }
+      },
+      "contactWithFieldsExample": {
+        "summary": "With fields",
+        "value": {
+          "id": 123,
+          "mail": "john.doe@example.com",
+          "phone": 1234567,
+          "twitter": "test@example.com",
+          "terms": [
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "userExample": {
+        "summary": "A sample user",
+        "value": {
+          "uid": 2,
+          "mail": "user@example.com",
+          "first_name": "John",
+          "last_name": "Doe",
+          "timezone": "Europe/Berlin",
+          "language": "de",
+          "created": 1627980505,
+          "changed": 1627980505,
+          "roles": [
+            {
+              "rid": 2,
+              "name": "Editor"
+            },
+            {
+              "rid": 4,
+              "name": "Writer"
+            }
+          ]
+        }
+      },
+      "textFieldExample": {
+        "summary": "Text",
+        "value": {
+          "field_type": "text",
+          "label": "My new textfield",
+          "description": "Example description",
+          "field_name": "my_new_textfield",
+          "size": 30,
+          "max_length": 255
+        }
+      },
+      "multiSelectionFieldExample": {
+        "summary": "Multi Selection",
+        "value": {
+          "field_type": "selection",
+          "label": "My new select field",
+          "description": "Example description",
+          "field_name": "my_new_select_field",
+          "field_type_option": "checkboxes",
+          "options": {
+            "value1": "option1",
+            "value2": "option2",
+            "value3": "option3"
+          },
+          "default_value": [
+            "value1",
+            "value2"
+          ]
+        }
+      },
+      "singleSelectionFieldExample": {
+        "summary": "Single Selection",
+        "value": {
+          "field_type": "selection",
+          "label": "My new select field",
+          "description": "Example description",
+          "field_name": "my_new_select_field",
+          "field_type_option": "select",
+          "options": {
+            "value1": "option1",
+            "value2": "option2",
+            "value3": "option3"
+          },
+          "default_value": "value1"
+        }
+      },
+      "dateFieldExample": {
+        "summary": "Date",
+        "value": {
+          "field_type": "date",
+          "label": "My new date field",
+          "description": "Example description",
+          "field_name": "my_new_date_field",
+          "granularity": "date_time"
+        }
+      },
+      "integerFieldExample": {
+        "summary": "Integer",
+        "value": {
+          "field_type": "integer",
+          "label": "My new integer field",
+          "description": "Example description",
+          "field_name": "my_new_integer_field",
+          "min": 0,
+          "max": 100
+        }
+      },
+      "floatFieldExample": {
+        "summary": "Float",
+        "value": {
+          "field_type": "float",
+          "label": "My new float field",
+          "description": "Example description",
+          "field_name": "my_new_float_field",
+          "decimal_marker": ".",
+          "min": 0,
+          "max": 88.88
+        }
+      },
+      "checkboxConfirmationFieldExample": {
+        "summary": "Checkbox Confirmation",
+        "value": {
+          "field_type": "checkbox_confirmation",
+          "label": "My new checkbox_confirmation field",
+          "description": "Example description",
+          "field_name": "my_new_checkbox_confirmation_field",
+          "confirmation_text": "Please confirm if you agree these terms and conditions [link]",
+          "link_text": "Terms and Conditions",
+          "link_url": "https://www.example.com"
+        }
+      },
+      "urlFieldExample": {
+        "summary": "URL",
+        "value": {
+          "field_type": "url",
+          "label": "My new url field",
+          "description": "Example description",
+          "field_name": "my_new_url_field"
+        }
+      }
+    },
+    "requestBodies": {
+      "ContactBody": {
+        "description": "Create a new contact in Quentn",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contact": {
+                  "$ref": "#/components/schemas/Contact"
+                },
+                "duplicate_check_method": {
+                  "$ref": "#/components/schemas/DuplicateCheckMethod"
+                },
+                "duplicate_merge_method": {
+                  "$ref": "#/components/schemas/DuplicateMergeMethod"
+                },
+                "return_fields": {
+                  "$ref": "#/components/schemas/ReturnFields"
+                },
+                "request_ip": {
+                  "$ref": "#/components/schemas/RequestIp"
+                },
+                "flood_limit": {
+                  "$ref": "#/components/schemas/FloodLimit"
+                },
+                "spam_protection": {
+                  "$ref": "#/components/schemas/SpamProtection"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "ContactsBody": {
+        "description": "Create multiple contacts",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "contacts": {
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Contact"
+                  },
+                  "default": [
+                    {
+                      "first_name": "John",
+                      "family_name": "Doe",
+                      "mail": "johndoe@example.com",
+                      "request_ip": "123.123.123.123"
+                    },
+                    {
+                      "first_name": "James",
+                      "family_name": "Doe",
+                      "mail": "jamesdoe@example.com",
+                      "request_ip": "123.123.123.123"
+                    }
+                  ]
+                },
+                "duplicate_check_method": {
+                  "$ref": "#/components/schemas/DuplicateCheckMethod"
+                },
+                "duplicate_merge_method": {
+                  "$ref": "#/components/schemas/DuplicateMergeMethod"
+                },
+                "return_fields": {
+                  "$ref": "#/components/schemas/ReturnFields"
+                },
+                "request_ip": {
+                  "$ref": "#/components/schemas/RequestIp"
+                },
+                "flood_limit": {
+                  "$ref": "#/components/schemas/FloodLimit"
+                },
+                "spam_protection": {
+                  "$ref": "#/components/schemas/SpamProtection"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "headers": {
+      "XRateLimitLimit": {
+        "description": "Indicates the maximum number of API requests that can be made within a certain time period",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "XRateLimitRemaining": {
+        "description": "The number of remaining requests in the current 60 second window",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      },
+      "XRateLimitReset": {
+        "description": "A unix timestamp indicating when the current window ends",
+        "style": "simple",
+        "explode": false,
+        "schema": {
+          "type": "integer"
+        }
+      }
+    },
+    "securitySchemes": {
+      "qntn_oauth": {
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "https://my.quentn.com/public/api/v1/oauth/",
+            "tokenUrl": "https://my.quentn.com/public/api/v1/oauth/request_temp",
+            "scopes": {
+              "all": "Scope of the API key."
+            }
+          }
+        }
+      },
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
